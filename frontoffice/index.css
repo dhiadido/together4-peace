@@ -1,0 +1,51 @@
+
+    :root{
+      --brand:#1e4e8c; /* bleu EspritBook */
+      --brand-2:#0d2a4b;
+    }
+
+    html{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif; color:#111}
+
+    /* Navbar */
+    .navbar{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    .navbar .nav-link{font-weight:700; color:var(--brand)}
+    .navbar .nav-link:hover{color:#c00}
+
+    /* Hero / Billboard */
+    #billboard .carousel-item{
+      height: 58vh;
+      min-height: 420px;
+      position: relative;
+      background:#f8f9fb;
+    }
+    #billboard .billboard-img{object-fit:cover; width:100%; height:100%; filter:contrast(1.05)}
+    #billboard .overlay{
+      position:absolute; inset:0; background:linear-gradient(90deg, rgba(13,42,75,.72) 0%, rgba(13,42,75,.35) 45%, rgba(13,42,75,0) 75%);
+    }
+    #billboard .caption{
+      position:absolute; inset:0; display:grid; place-items:center start; padding: clamp(1rem, 3vw, 3rem);
+      color:#fff; max-width:920px;
+    }
+    #billboard h1{font-size: clamp(1.6rem, 3.2vw, 3rem); margin:0 0 .5rem}
+    #billboard p{max-width: 60ch; opacity:.95; margin:0 0 1rem}
+    .btn-accent{--bs-btn-bg:#fff; --bs-btn-color:var(--brand); --bs-btn-hover-bg:#e9eef6; --bs-btn-border-color:transparent}
+
+    /* Section headings */
+    .section-header .title{color:#666; font-size:.95rem; letter-spacing:.02em}
+    .section-header h2{font-size: clamp(1.4rem, 2.6vw, 2rem); margin:.25rem 0 0}
+
+    /* Books grid */
+    .book-card{border:0; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,.08); transition:transform .25s ease, box-shadow .25s ease; border-radius:10px}
+    .book-card:hover{transform:translateY(-4px); box-shadow:0 14px 36px rgba(0,0,0,.12)}
+    .book-card img{height:300px; width:100%; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px}
+
+    /* About / Contact blocks */
+    .info-block{background:#fafafa; border:1px solid #eee; border-radius:12px; padding:1.25rem}
+
+    /* Footer */
+    footer{border-top:1px solid #e5e5e5; background:#fafafa}
+
+    /* Small utility */
+    .logo{height:54px}
+  

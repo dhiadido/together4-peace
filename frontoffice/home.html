@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil – Together 4 Peace</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#home">
+        <img src="images/imagec.png" alt="Logo Together 4 Peace">
+        Together 4 Peace
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="#home">Accueil</a></li>
+          <li class="nav-item"><a class="nav-link" href="#sponsors">Sponsors</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Projets</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+        <button id="logoutBtn" class="btn btn-outline-danger ms-3">Se déconnecter</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section" id="home">
+    <div class="container text-center">
+      <h1>Construisons ensemble une société de paix et d’inclusion 🌍</h1>
+      <p>Together 4 Peace promeut la tolérance, la solidarité et le dialogue entre communautés.</p>
+      <a href="#articles" class="btn btn-primary">Découvrir nos articles</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mt-5">
+
+    <!-- Welcome Box -->
+    <div class="welcome-box text-center mb-5">
+      <h2>👋 Bienvenue, <span id="usernameDisplay">Utilisateur</span> !</h2>
+      <p class="lead">Merci de contribuer à bâtir un monde plus juste et inclusif.</p>
+    </div>
+
+    <!-- Articles Section -->
+    <section id="articles">
+      <article class="fade-in">
+        <h3 class="text-primary mb-3">🌈 Inclusion sociale : un pilier de la paix</h3>
+        <p>L’inclusion sociale est essentielle pour construire une société équilibrée. Les inégalités et discriminations peuvent créer des tensions. En promouvant la justice sociale et l’égalité des chances, chacun peut contribuer positivement au développement collectif.</p>
+        <p>Nos projets donnent la parole aux groupes marginalisés et encouragent la participation citoyenne.</p>
+      </article>
+
+      <article class="fade-in">
+        <h3 class="text-primary mb-3">🌱 Éducation à la paix : apprendre à vivre ensemble</h3>
+        <p>L’éducation joue un rôle fondamental dans la promotion de la paix. Dès le plus jeune âge, il est essentiel d’enseigner le respect, la tolérance et la compréhension mutuelle.</p>
+        <p>Nous développons des programmes éducatifs centrés sur la gestion des conflits, la communication non violente et la coopération interculturelle.</p>
+      </article>
+
+      <article class="fade-in">
+        <h3 class="text-primary mb-3">🌍 Solidarité internationale : un engagement global</h3>
+        <p>La paix et l’inclusion ne connaissent pas de frontières. À travers nos partenariats internationaux, nous soutenons des initiatives favorisant le dialogue entre peuples et cultures.</p>
+        <p>Ensemble, nous travaillons pour un avenir où la diversité est célébrée et où la paix devient une réalité quotidienne.</p>
+      </article>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="cards mt-5">
+      <div class="card-item fade-in">
+        <h4>📚 Bibliothèque numérique</h4>
+        <p>Explorez nos ressources et documents sur la paix et le vivre-ensemble.</p>
+        <a href="#" class="btn btn-primary">Explorer</a>
+      </div>
+
+      <div class="card-item fade-in">
+        <h4>🕊️ Projets communautaires</h4>
+        <p>Découvrez les initiatives locales qui rapprochent les communautés.</p>
+        <a href="#" class="btn btn-primary">Découvrir</a>
+      </div>
+
+      <div class="card-item fade-in">
+        <h4>💬 Contact</h4>
+        <p>Une question ou une idée ? Notre équipe est à votre écoute.</p>
+        <a href="#" class="btn btn-primary">Nous contacter</a>
+      </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section id="sponsors" class="py-5 bg-light">
+      <div class="container text-center">
+        <h2 class="mb-4 text-primary">🤝 Nos Sponsors</h2>
+        <p class="mb-5">Merci à nos partenaires pour leur soutien à la paix et l'inclusion.</p>
+
+        <div id="sponsorsCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                <img src="images/sponsor1.png" alt="Sponsor 1" class="sponsor-logo">
+                <img src="images/sponsor2.png" alt="Sponsor 2" class="sponsor-logo">
+                <img src="images/sponsor3.png" alt="Sponsor 3" class="sponsor-logo">
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                <img src="images/sponsor4.png" alt="Sponsor 4" class="sponsor-logo">
+                <img src="images/sponsor5.png" alt="Sponsor 5" class="sponsor-logo">
+                <img src="images/sponsor6.png" alt="Sponsor 6" class="sponsor-logo">
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#sponsorsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#sponsorsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-3 bg-light text-center">
+    <p>&copy; 2025 Together 4 Peace – Tous droits réservés.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Home JS -->
+  <script>
+    // Nom de l'utilisateur
+    const usernameDisplay = document.getElementById("usernameDisplay");
+    const username = localStorage.getItem("username") || "Utilisateur";
+    usernameDisplay.textContent = username;
+
+    // Bouton déconnexion
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      if (confirm("Voulez-vous vraiment vous déconnecter ?")) {
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+      }
+    });
+
+    // Animation fade-in pour articles et cartes
+    const fadeElements = document.querySelectorAll("article, .card-item");
+    fadeElements.forEach((el, index) => {
+      setTimeout(() => {
+        el.classList.add("fade-in");
+      }, index * 300);
+    });
+
+    // Carrousel auto slide sponsors
+    const sponsorsCarousel = document.querySelector('#sponsorsCarousel');
+    if (sponsorsCarousel) {
+      new bootstrap.Carousel(sponsorsCarousel, {
+        interval: 3000,
+        wrap: true
+      });
+    }
+  </script>
+
+</body>
+</html>

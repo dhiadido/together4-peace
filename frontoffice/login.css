@@ -1,0 +1,93 @@
+:root {
+  --brand: #1e4e8c;
+  --brand-2: #0d2a4b;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.login-form {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  position: relative;
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  width: 85px;
+  height: 85px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.login-form h2 {
+  text-align: center;
+  color: var(--brand-2);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.form-control:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 0.2rem rgba(30, 78, 140, 0.25);
+}
+
+.btn-primary {
+  background-color: var(--brand);
+  border-color: var(--brand);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-2);
+  border-color: var(--brand-2);
+  transform: translateY(-2px);
+}
+
+.text-small {
+  font-size: 0.9rem;
+}
+
+/* Checkbox style */
+.form-check-label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    padding: 1.5rem;
+  }
+  .login-form h2 {
+    font-size: 1.4rem;
+  }
+}

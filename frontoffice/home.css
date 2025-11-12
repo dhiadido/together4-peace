@@ -1,0 +1,189 @@
+/* ===== Body & Navbar ===== */
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f7f9fc;
+  margin: 0;
+  padding-top: 80px; /* Pour navbar fixe */
+  color: #333;
+}
+
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 0.75rem 1rem;
+}
+
+.navbar .navbar-brand img {
+  height: 50px;
+  width: 50px;
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.navbar .nav-link {
+  font-weight: 600;
+  color: #1e4e8c;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #0d2a4b;
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url("images/peace-bg.jpg") center/cover no-repeat;
+  color: #fff;
+  padding: 140px 20px;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto 20px;
+}
+
+.hero-section .btn-primary {
+  background-color: #1e4e8c;
+  border-color: #1e4e8c;
+  transition: all 0.3s ease;
+}
+
+.hero-section .btn-primary:hover {
+  background-color: #0d2a4b;
+  border-color: #0d2a4b;
+}
+
+/* ===== Welcome Box ===== */
+.welcome-box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* ===== Articles ===== */
+article {
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+article.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+article h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #1e4e8c;
+}
+
+article p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+/* ===== Cards ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.card-item.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.card-item h4 {
+  color: #1e4e8c;
+  margin-bottom: 0.5rem;
+}
+
+.card-item p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== Sponsors Section ===== */
+#sponsors {
+  background-color: #f9fafc;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+#sponsors h2 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+#sponsors p {
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.sponsor-logo {
+  max-height: 80px;
+  margin: 0 15px;
+  object-fit: contain;
+  filter: grayscale(0.2);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.sponsor-logo:hover {
+  transform: scale(1.1);
+  filter: grayscale(0);
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+  background-color: #1e4e8c;
+  border-color: #1e4e8c;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0d2a4b;
+  border-color: #0d2a4b;
+}
+
+/* ===== Footer ===== */
+footer {
+  background-color: #f7f9fc;
+  padding: 1.5rem 0;
+  text-align: center;
+  color: #555;
+  font-size: 0.9rem;
+}
