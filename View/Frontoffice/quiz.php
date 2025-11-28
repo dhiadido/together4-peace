@@ -1,5 +1,4 @@
-<!-- View/Frontoffice/quiz.php -->
-
+<div align="center">
 <div class="container">
   <section class="quiz">
     <h2>Simulateur de score</h2>
@@ -13,7 +12,7 @@
   </section>
 
   <section id="offersContainer" class="offers hidden">
-    <!-- Les offres s'afficheront ici (via AJAX vers offres_specialistes.php) -->
+    
   </section>
 </div>
 
@@ -23,5 +22,5 @@
     <div id="modalBody"></div>
   </div>
 </div>
-
-<script src="script.js"></script>
+</div>
+<script src="..\..\assets\js\scriptOffre.js"></script>

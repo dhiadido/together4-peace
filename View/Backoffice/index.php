@@ -1,5 +1,6 @@
 <?php include "template.php"; ?>
 
+
 <h2 class="mb-4">Tableau de bord général</h2>
 
 <div class="row g-4">

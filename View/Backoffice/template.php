@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Back Office - Together4Peace</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
     <style>
@@ -69,30 +67,27 @@
 
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
- <!-- LOGO -->
     <div class="logo-container">
-        <img src="../../assets/logo.png" alt="Logo">
+        <img src="../../assets/images/logo.png" alt="Logo">
     </div>
 
-    <!-- TITLE UNDER LOGO -->
     <div class="sidebar-title">
         Together4Peace
     </div>
 
     <a href="index.php"><i class="fa fa-home me-2"></i> Accueil</a>
 
-    <a href="back_offre_list.php"><i class="fa fa-briefcase me-2"></i> Offres</a>
+    <a href="OffreList.php"><i class="fa fa-briefcase me-2"></i> Offres</a>
+    <a href="ArticleList.php"><i class="fa fa-briefcase me-2"></i>Articles</a>
     <a href=""><i class="fa fa-users me-2"></i> Paramètres</a>
     <a href="..\..\View\Frontoffice\index.php"><i class="fa fa-sign-out-alt me-2"></i> Site </a>
+    
 </div>
 
-<!-- TOPBAR -->
 <div class="topbar">
     <span>Connecté en tant qu'administrateur</span>
 </div>
 
-<!-- CONTENT START -->
 <div class="content">

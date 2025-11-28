@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', function(){
   viewOffers.addEventListener('click', ()=>{
     const score = parseInt(scoreInput.value,10);
     if(score < 40){
-      // fetch offers via GET to offres_specialistes.php (simulé)
-      fetch('offres_specialistes.php?score=' + score)
+      fetch('../../View/Frontoffice/ShowOffre.php?score=' + score)
         .then(r=>r.text())
         .then(html=>{
           offersContainer.innerHTML = html;
           offersContainer.classList.remove('hidden');
         })
         .catch(err=>{
+          console.error('Fetch error:', err);
           offersContainer.innerHTML = '<div class="card"><p>Erreur lors du chargement.</p></div>';
           offersContainer.classList.remove('hidden');
         });

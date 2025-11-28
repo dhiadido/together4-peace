@@ -1,40 +1,33 @@
 <?php
-require_once(__DIR__ . '/../../config.php');
-$pdo = config::getConnexion();
+require_once(__DIR__ . '/../../Controller/OffreController.php');
+require_once(__DIR__ . '/../../Model/Offres.php');
 
-// ID à modifier
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$controller = new OffreController();
 
-// Traitement formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $sql = 'UPDATE offres_specialistes 
-            SET nom_specialiste=:nom, description=:desc, prix=:prix, categorie=:cat, 
-                categorie_probleme=:cprob, contact=:contact, image=:img 
-            WHERE id_offre=:id';
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':nom'     => $_POST['nom'],
-        ':desc'    => $_POST['description'],
-        ':prix'    => floatval($_POST['prix']),
-        ':cat'     => $_POST['categorie'],
-        ':cprob'   => $_POST['categorie_probleme'],
-        ':contact' => $_POST['contact'],
-        ':img'     => $_POST['image'] ?: 'assets/placeholder.png',
-        ':id'      => $id
-    ]);
-
-    header('Location: back_offre_list.php');
+    // Create Offre object with updated data
+    $offre = new Offre(
+        $_POST['nom'],
+        $_POST['description'],
+        floatval($_POST['prix']),
+        $_POST['categorie'],
+        $_POST['categorie_probleme'],
+        $_POST['contact'],
+        $_POST['image'] ?: 'assets/placeholder.png'
+    );
+    
+    // Update offre in database
+    $controller->updateOffre($offre, $id);
+    
+    // Redirect
+    header('Location: OffreList.php');
     exit;
 }
 
-// Charger l'offre actuelle
-$stmt = $pdo->prepare('SELECT * FROM offres_specialistes WHERE id_offre = :id');
-$stmt->execute([':id' => $id]);
-$r = $stmt->fetch(PDO::FETCH_ASSOC);
+// Get existing offre data
+$r = $controller->getOffreById($id);
 
-// Charger le template (sidebar + topbar + content)
 include "template.php";
 ?>
 
@@ -87,11 +80,13 @@ include "template.php";
 
         <input name="image" type="text" class="form-control"
                value="<?= htmlspecialchars($r['image']) ?>">
-        <small class="text-muted">Laissez ce champ tel quel si vous ne changez pas l’image.</small>
+        <small class="text-muted">Laissez ce champ tel quel si vous ne changez pas l'image.</small>
     </div>
 
     <button type="submit" class="btn btn-warning">Enregistrer</button>
 </form>
+
+    <script src="../../assets/js/validationOffre.js"></script>
 
 </div>
 </body>

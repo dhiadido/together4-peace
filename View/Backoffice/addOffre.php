@@ -1,54 +1,51 @@
 <?php
-require_once(__DIR__ . '/../../config.php');
-$pdo = config::getConnexion();
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+echo "Page loaded...<br>";
+
+require_once(__DIR__ . '/../../Controller/OffreController.php');
+require_once(__DIR__ . '/../../Model/Offres.php');
+
+echo "Files included...<br>";
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-  $imagePath = 'assets/placeholder.png'; // Image par défaut
-  
-  // Gérer l'upload de l'image
-  if(isset($_FILES['image']) && $_FILES['image']['error'] === 0){
-    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    $fileExt = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+    echo "POST request detected...<br>";
+    echo "<pre>POST data: ";
+    print_r($_POST);
+    echo "</pre>";
     
-    if(in_array($fileExt, $allowed) && $_FILES['image']['size'] < 5000000){
-      
-      $newFilename = 'specialist_' . uniqid() . '.' . $fileExt;
-      
-      // Dossier réel dans ton projet
-      $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/projet - copie/assets/';
-      
-      if(!is_dir($uploadDir)){
-        mkdir($uploadDir, 0777, true);
-      }
-      
-      $destination = $uploadDir . $newFilename;
-
-      if(move_uploaded_file($_FILES['image']['tmp_name'], $destination)){
-        $imagePath = 'assets/' . $newFilename;
-      }
-    }
-  }
-  
-  $sql = 'INSERT INTO offres_specialistes 
-          (nom_specialiste, description, prix, categorie, categorie_probleme, contact, image) 
-          VALUES (:nom,:desc,:prix,:cat,:cprob,:contact,:img)';
-
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([
-    ':nom'=>$_POST['nom'],
-    ':desc'=>$_POST['description'],
-    ':prix'=>floatval($_POST['prix']),
-    ':cat'=>$_POST['categorie'],
-    ':cprob'=>$_POST['categorie_probleme'],
-    ':contact'=>$_POST['contact'],
-    ':img'=>$imagePath
-  ]);
-
-  header('Location: back_offre_list.php');
-  exit;
+    $controller = new OffreController();
+    echo "Controller created...<br>";
+    
+    // Handle image upload
+    $imagePath = $controller->handleImageUpload();
+    echo "Image path: " . $imagePath . "<br>";
+    
+    // Create Offre object
+    $offre = new Offre(
+        $_POST['nom'],
+        $_POST['description'],
+        floatval($_POST['prix']),
+        $_POST['categorie'],
+        $_POST['categorie_probleme'],
+        $_POST['contact'],
+        $imagePath
+    );
+    
+    echo "Offre object created...<br>";
+    
+    // Add offre to database
+    $controller->addOffre($offre);
+    
+    echo "Offre added! Redirecting...<br>";
+    
+    // Redirect
+    header('Location: OffreList.php');
+    exit;
 }
 
-// → On charge ton template
 include "template.php"; 
 ?>
 
@@ -94,11 +91,12 @@ include "template.php";
         <div class="mt-3" id="imagePreview"></div>
     </div>
 
-    <button type="submit" class="btn btn-success">Créer</button>
+    <button type="submit" class="btn btn-success">Créer</button><br>
+    <a href="OffreList.php" class="btn btn-secondary">Annuler</a>
 
 </form>
 
-<script src="add.js"></script>
+<script src="../../assets/js/validationOffre.js"></script>
 
 </div>
 </body>
