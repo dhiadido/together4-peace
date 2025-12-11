@@ -1,0 +1,44 @@
+# Fichiers sensibles
+config/GoogleConfig.php
+admin_hash.txt
+*.env
+.env
+
+# Dépendances
+vendor/
+node_modules/
+
+# Fichiers de configuration locaux
+.htaccess
+
+# Uploads utilisateurs
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+*.log
+error_log
+
+# Fichiers temporaires
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Base de données locale
+*.sql
+!create_password_resets_table.sql
+!add_google_id_column.sql
+!add_face_embedding_column.sql
+!add_date_inscription_column.sql
+
+# Cache
+cache/
+tmp/
+
