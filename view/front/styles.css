@@ -1,0 +1,267 @@
+/* Variables de couleurs pour la cohérence */
+:root {
+    --color-primary: #002D62;   /* Bleu Marine */
+    --color-secondary: #ffc107; /* Jaune Optimiste (dons, accent) */
+    --color-accent: #26a69a;    /* Vert Menthe (Paix/Croissance) */
+    --color-dark: #333;
+    --color-light: #f4f4f4;
+    --font-family: 'Arial', sans-serif;
+}
+
+/* BASE STYLE */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    background-color: #fff;
+    color: var(--color-dark);
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+/* HEADER & NAVIGATION */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: #fff;
+    border-bottom: 3px solid var(--color-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Le lien englobant le logo */
+.logo-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Conteneur du logo et du texte */
+.logo {
+    display: flex;
+    align-items: center; /* Aligne verticalement l'image et le texte */
+    gap: 10px; /* Espace entre l'image et le nom */
+}
+
+/* Style de l'image du logo */
+.header-logo {
+    max-height: 50px; 
+    width: auto; 
+}
+
+/* Style du nom du site */
+.site-name {
+    font-size: 1.6em; 
+    font-weight: bold;
+    color: var(--color-primary); /* Le nom du site en Bleu Marine */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+nav ul a {
+    color: var(--color-dark);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav ul a:hover {
+    color: var(--color-primary);
+}
+
+.nav-cta {
+    font-weight: bold;
+    color: var(--color-secondary) !important; 
+}
+
+/* BUTTONS */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border: 2px solid var(--color-primary);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    margin-left: 10px;
+}
+
+.btn-donate {
+    background-color: var(--color-secondary);
+    color: var(--color-dark);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #004080; 
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-light);
+}
+
+/* HERO SECTION */
+.hero-section {
+    background-color: var(--color-light);
+    background-image: url('placeholder-peace.jpg'); 
+    background-size: cover;
+    background-position: center;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 3em;
+    color: var(--color-primary); 
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: var(--color-dark);
+}
+
+/* FEATURED SECTIONS (Carreaux Pros) */
+.featured-sections {
+    padding: 60px 5%;
+    text-align: center;
+    background-color: #fafafa; /* Léger fond pour faire ressortir les cartes */
+}
+
+.featured-sections h2 {
+    font-size: 2em;
+    color: var(--color-dark);
+    margin-bottom: 40px;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px; /* Espace accru entre les cartes */
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--color-light);
+    border-radius: 8px;
+    padding: 30px;
+    width: 23%; /* Ajusté pour quatre cartes par ligne (environ) */
+    min-width: 250px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ombre plus marquée */
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+    margin: 15px 0;
+    color: var(--color-primary); /* Titres des cartes en Bleu Marine */
+}
+
+/* Couleurs des icônes */
+.icon-blue { color: var(--color-primary); } 
+.icon-yellow { color: var(--color-secondary); } 
+.icon-green { color: var(--color-accent); } 
+.icon-primary { color: var(--color-primary); }
+
+.card-link {
+    display: inline-block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--color-accent);
+}
+
+/* FOOTER */
+footer {
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    padding: 40px 5% 15px;
+    font-size: 0.9em;
+}
+
+/* ... (Reste du footer identique) ... */
+
+.footer-logo {
+    /* Style pour que le logo image + texte s'affiche correctement dans le footer */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: auto;
+}
+
+.footer-logo-img {
+    max-height: 40px; /* Taille légèrement réduite dans le footer */
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 900px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+    nav ul {
+        margin-top: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    nav ul li {
+        margin: 5px 10px;
+    }
+    .btn-donate {
+        margin-top: 10px;
+    }
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card {
+        width: 90%;
+    }
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+}
