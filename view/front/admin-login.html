@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Together4Peace - Connexion Admin</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="admin-styles.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-link">
+            <div class="logo">
+                <img src="logo.png" alt="Logo Together4Peace" class="header-logo">
+                <span class="site-name">Together4Peace</span>
+            </div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="about.html">À Propos</a></li>
+                <li><a href="listQuizFront.php">Quiz</a></li>
+                <li><a href="testimonials.html">Témoignages</a></li>
+                <li><a href="charter.html">Charte</a></li>
+                <li><a href="offers.html" class="nav-cta">Offres</a></li>
+            </ul>
+        </nav>
+        <a href="admin-login.html" class="btn btn-donate">Espace Admin</a>
+    </header>
+
+    <section class="admin-login-section">
+        <div class="login-container">
+            <h2><i class="fas fa-lock"></i> Espace d'Administration</h2>
+            <form action="admin-dashboard.html" method="POST"> 
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full-width">Se Connecter</button>
+            </form>
+            <p class="forgot-password"><a href="#">Mot de passe oublié ?</a></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="logo.png" alt="Logo Together4Peace" class="header-logo footer-logo-img">
+                <span class="site-name">Together4Peace</span>
+            </div>
+            <div class="footer-links">
+                <h4>Liens Utiles</h4>
+                <ul>
+                    <li><a href="about.html">Notre Mission</a></li>
+                    <li><a href="charter.html">La Charte</a></li>
+                    <li><a href="offers.html">Nos Offres</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>Suivez-nous</h4>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Together4Peace. Tous droits réservés. | Mentions Légales
+        </div>
+    </footer>
+
+</body>
+</html>
