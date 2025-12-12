@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 <?php
 require_once(__DIR__ . '/../config.php');
 require_once(__DIR__ . '/../Model/Article.php');
 
 class ArticleController {
 
-    /* ----------------------
-       ADD ARTICLE
-    -----------------------*/
     public function addArticle($article) {
         $titre = $article->getTitre();
         $theme = $article->getTheme();
@@ -34,10 +30,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       UPDATE ARTICLE
-    -----------------------*/
     public function updateArticle($article, $id) {
         $titre = $article->getTitre();
         $theme = $article->getTheme();
@@ -67,11 +59,16 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       DELETE ARTICLE
-    -----------------------*/
     public function deleteArticle($id) {
+        // Récupérer l'image avant suppression pour la supprimer du serveur
+        $article = $this->getArticleById($id);
+        if ($article && !empty($article['image'])) {
+            $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/projet2/' . str_replace('../../', '', $article['image']);
+            if (file_exists($imagePath) && strpos($imagePath, 'images/articles/') !== false) {
+                unlink($imagePath);
+            }
+        }
+        
         $sql = 'DELETE FROM articles WHERE id_article = :id';
 
         $db = config::getConnexion();
@@ -84,10 +81,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       GET ARTICLE BY ID
-    -----------------------*/
     public function getArticleById($id) {
         $sql = 'SELECT * FROM articles WHERE id_article = :id';
 
@@ -103,10 +96,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       GET ARTICLE WITH OFFRES (JOIN)
-    -----------------------*/
     public function getArticleWithOffres($id_article) {
         $sql = 'SELECT a.*, 
                        o.id_offre, o.nom_specialiste, o.description as offre_description,
@@ -128,7 +117,6 @@ class ArticleController {
                 return null;
             }
 
-            // Structure the data: article + its offres
             $article = [
                 'id_article' => $results[0]['id_article'],
                 'titre' => $results[0]['titre'],
@@ -140,7 +128,6 @@ class ArticleController {
                 'offres' => []
             ];
 
-            // Add all offres to the article
             foreach ($results as $row) {
                 if ($row['id_offre']) {
                     $article['offres'][] = [
@@ -166,10 +153,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       LIST ALL ARTICLES
-    -----------------------*/
     public function listArticles() {
         $sql = 'SELECT *, DATEDIFF(NOW(), date_publication) as days_old 
                 FROM articles 
@@ -186,10 +169,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       LIST ALL ARTICLES WITH THEIR OFFRES (JOIN)
-    -----------------------*/
     public function listArticlesWithOffres() {
         $sql = 'SELECT a.*, 
                        DATEDIFF(NOW(), a.date_publication) as article_days_old,
@@ -212,7 +191,6 @@ class ArticleController {
             foreach ($results as $row) {
                 $articleId = $row['id_article'];
                 
-                // If article not yet in array, add it
                 if (!isset($articles[$articleId])) {
                     $articles[$articleId] = [
                         'id_article' => $row['id_article'],
@@ -227,7 +205,6 @@ class ArticleController {
                     ];
                 }
                 
-                // Add offre if it exists
                 if ($row['id_offre']) {
                     $articles[$articleId]['offres'][] = [
                         'id_offre' => $row['id_offre'],
@@ -252,11 +229,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       🔥 SMART RECOMMENDATION SYSTEM 🔥
-       NOW WITH DATE BOOSTING!
-    -----------------------*/
     public function getSmartRecommendations($quizScore) {
         $sql = 'SELECT a.*, 
                        DATEDIFF(NOW(), a.date_publication) as article_days_old,
@@ -277,7 +249,6 @@ class ArticleController {
             $stmt = $db->query($sql);
             $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Calculate recommendation score for each article
             foreach ($articles as &$article) {
                 $article['recommendation_score'] = $this->calculateRecommendationScore(
                     $quizScore,
@@ -285,13 +256,11 @@ class ArticleController {
                 );
             }
 
-            // Sort by recommendation score (highest first)
             usort($articles, function($a, $b) {
                 return $b['recommendation_score'] <=> $a['recommendation_score'];
             });
 
-            // Get full details with offres for top articles
-            $topArticles = array_slice($articles, 0, 5); // Top 5 recommended
+            $topArticles = array_slice($articles, 0, 5);
             $detailedArticles = [];
 
             foreach ($topArticles as $article) {
@@ -303,7 +272,6 @@ class ArticleController {
                     $detailedArticle['min_price'] = $article['min_price'];
                     $detailedArticle['days_old'] = $article['article_days_old'];
                     
-                    // Rank offres within article
                     $detailedArticle['offres'] = $this->rankOffres(
                         $detailedArticle['offres'],
                         $quizScore
@@ -320,19 +288,12 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       CALCULATE RECOMMENDATION SCORE
-       NOW WITH RECENCY BONUS! 🆕
-    -----------------------*/
     private function calculateRecommendationScore($quizScore, $article) {
         $score = 0;
 
-        // 1. THEME RELEVANCE (35 points max - reduced to make room for recency)
         $themeScore = $this->getThemeRelevance($article['theme'], $quizScore);
         $score += $themeScore * 35;
 
-        // 2. OFFRE AVAILABILITY (20 points max)
         $offreCount = (int)$article['offre_count'];
         if ($offreCount >= 5) {
             $score += 20;
@@ -342,7 +303,6 @@ class ArticleController {
             $score += 10;
         }
 
-        // 3. PRICE AFFORDABILITY (15 points max)
         $minPrice = (float)$article['min_price'];
         if ($quizScore < 40) {
             if ($minPrice <= 50) {
@@ -356,58 +316,47 @@ class ArticleController {
             $score += 12;
         }
 
-        // 4. POPULARITY (10 points max)
         $popularity = (float)($article['avg_popularity'] ?? 0);
         $score += min(10, $popularity * 2);
 
-        // 5. 🆕 RECENCY BONUS (20 points max - NEW!)
         $daysOld = (int)($article['article_days_old'] ?? 999);
         if ($daysOld <= 7) {
-            $score += 20; // Brand new
+            $score += 20;
         } elseif ($daysOld <= 30) {
-            $score += 15; // Recent
+            $score += 15;
         } elseif ($daysOld <= 90) {
-            $score += 10; // Still fresh
+            $score += 10;
         } elseif ($daysOld <= 180) {
-            $score += 5; // Older but OK
+            $score += 5;
         }
         
-        // Bonus if offres are also recent
         $avgOffreAge = (float)($article['avg_offre_age'] ?? 999);
         if ($avgOffreAge <= 14) {
-            $score += 5; // New specialists available
+            $score += 5;
         }
 
         return round($score, 2);
     }
 
-
-    /* ----------------------
-       THEME RELEVANCE SCORING
-    -----------------------*/
     private function getThemeRelevance($theme, $quizScore) {
         $theme = strtolower(trim($theme));
         
-        // High priority themes for low scores
         $criticalThemes = [
             'violence', 'conflit', 'urgence', 'crise',
             'trauma', 'abus', 'harcèlement', 'guerre'
         ];
         
-        // Medium priority
         $importantThemes = [
             'médiation', 'psychologie', 'anxiété', 'stress',
             'famille', 'relation', 'communication', 'inclusion'
         ];
         
-        // Educational themes
         $educationalThemes = [
             'éducation', 'paix', 'société', 'prévention',
             'sensibilisation', 'tolérance', 'dialogue'
         ];
 
         if ($quizScore < 40) {
-            // Low score: prioritize critical themes
             foreach ($criticalThemes as $critical) {
                 if (stripos($theme, $critical) !== false) {
                     return 1.0;
@@ -425,7 +374,6 @@ class ArticleController {
             }
             return 0.5;
         } else {
-            // Higher score: educational themes are good
             foreach ($educationalThemes as $educational) {
                 if (stripos($theme, $educational) !== false) {
                     return 0.9;
@@ -441,18 +389,12 @@ class ArticleController {
     }
 
 
-    /* ----------------------
-       RANK OFFRES WITHIN ARTICLE
-       NOW WITH DATE PRIORITY! 🆕
-    -----------------------*/
     private function rankOffres($offres, $quizScore) {
         foreach ($offres as &$offre) {
             $score = 0;
             
-            // Popularity factor
             $score += (float)($offre['popularite'] ?? 0) * 3;
-            
-            // Price factor
+
             if ($quizScore < 40) {
                 if ($offre['prix'] <= 50) {
                     $score += 20;
@@ -463,27 +405,24 @@ class ArticleController {
                 $score += 10;
             }
             
-            // Category bonus
             $category = strtolower($offre['categorie'] ?? '');
             if (stripos($category, 'psychologue') !== false || 
                 stripos($category, 'médiateur') !== false) {
                 $score += 15;
             }
             
-            // 🆕 RECENCY BONUS
             $daysOld = (int)($offre['days_old'] ?? 999);
             if ($daysOld <= 7) {
-                $score += 15; // Very new
+                $score += 15;
             } elseif ($daysOld <= 30) {
-                $score += 10; // Recent
+                $score += 10;
             } elseif ($daysOld <= 90) {
-                $score += 5; // Still OK
+                $score += 5;
             }
             
             $offre['relevance_score'] = $score;
         }
         
-        // Sort by relevance
         usort($offres, function($a, $b) {
             return $b['relevance_score'] <=> $a['relevance_score'];
         });
@@ -491,10 +430,6 @@ class ArticleController {
         return $offres;
     }
 
-
-    /* ----------------------
-       TRACK OFFRE CLICK
-    -----------------------*/
     public function trackOffreClick($offreId) {
         $sql = 'UPDATE offres_specialistes 
                 SET popularite = popularite + 1 
@@ -511,10 +446,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       GET OFFRES BY ARTICLE
-    -----------------------*/
     public function getOffresByArticle($id_article) {
         $sql = "SELECT *, DATEDIFF(NOW(), date_ajout) as days_old 
                 FROM offres_specialistes 
@@ -533,10 +464,6 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       COUNT OFFRES FOR AN ARTICLE
-    -----------------------*/
     public function countOffresByArticle($id_article) {
         $sql = "SELECT COUNT(*) as total FROM offres_specialistes WHERE article = :id";
 
@@ -553,12 +480,9 @@ class ArticleController {
         }
     }
 
-
-    /* ----------------------
-       IMAGE UPLOAD
-    -----------------------*/
     public function handleImageUpload() {
-        $imagePath = '../../assets/images/logo.png';
+        // Retourne NULL si aucune image n'est uploadée (pas d'image par défaut)
+        $imagePath = null;
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
             $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
@@ -566,7 +490,8 @@ class ArticleController {
 
             if (in_array($ext, $allowed) && $_FILES['image']['size'] < 5000000) {
                 $newName = 'article_' . uniqid() . '.' . $ext;
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/projet2/assets/images/';
+                // DOSSIER SÉPARÉ POUR LES ARTICLES
+                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/projet2/assets/images/articles/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
@@ -575,7 +500,7 @@ class ArticleController {
                 $destination = $uploadDir . $newName;
 
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
-                    $imagePath = '../../assets/images/' . $newName;
+                    $imagePath = '../../assets/images/articles/' . $newName;
                 }
             }
         }
@@ -583,10 +508,6 @@ class ArticleController {
         return $imagePath;
     }
 
-
-    /* ----------------------
-       🆕 HELPER: Format Time Ago
-    -----------------------*/
     public static function timeAgo($daysOld) {
         if ($daysOld == 0) return "Aujourd'hui";
         if ($daysOld == 1) return "Hier";
@@ -597,161 +518,3 @@ class ArticleController {
     }
 }
 ?>
-=======
-<?php
-require_once(__DIR__ . '/../config.php');
-require_once(__DIR__ . '/../Model/Article.php');
-
-class ArticleController {
-
-    /* ----------------------
-       ADD ARTICLE
-    -----------------------*/
-    public function addArticle($article) {
-        $titre = $article->getTitre();
-        $theme = $article->getTheme();
-        $resume = $article->getResume();
-        $contenu = $article->getContenu();
-        $image = $article->getImage();
-
-        $sql = 'INSERT INTO articles (titre, theme, resume, contenu, image)
-                VALUES (:titre, :theme, :resume, :contenu, :image)';
-
-        $db = config::getConnexion();
-
-        try {
-            $stmt = $db->prepare($sql);
-            $stmt->execute([
-                ':titre' => $titre,
-                ':theme' => $theme,
-                ':resume' => $resume,
-                ':contenu' => $contenu,
-                ':image' => $image
-            ]);
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-        }
-    }
-
-
-    /* ----------------------
-       UPDATE ARTICLE
-    -----------------------*/
-    public function updateArticle($article, $id) {
-        $titre = $article->getTitre();
-        $theme = $article->getTheme();
-        $resume = $article->getResume();
-        $contenu = $article->getContenu();
-        $image = $article->getImage();
-
-        $sql = 'UPDATE articles 
-                SET titre=:titre, theme=:theme, resume=:resume, 
-                    contenu=:contenu, image=:image 
-                WHERE id_article=:id';
-
-        $db = config::getConnexion();
-
-        try {
-            $stmt = $db->prepare($sql);
-            $stmt->execute([
-                ':titre' => $titre,
-                ':theme' => $theme,
-                ':resume' => $resume,
-                ':contenu' => $contenu,
-                ':image' => $image,
-                ':id' => $id
-            ]);
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-        }
-    }
-
-
-    /* ----------------------
-       DELETE ARTICLE
-    -----------------------*/
-    public function deleteArticle($id) {
-        $sql = 'DELETE FROM articles WHERE id_article = :id';
-
-        $db = config::getConnexion();
-
-        try {
-            $stmt = $db->prepare($sql);
-            $stmt->execute([':id' => $id]);
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-        }
-    }
-
-
-    /* ----------------------
-       GET ARTICLE BY ID
-    -----------------------*/
-    public function getArticleById($id) {
-        $sql = 'SELECT * FROM articles WHERE id_article = :id';
-
-        $db = config::getConnexion();
-
-        try {
-            $stmt = $db->prepare($sql);
-            $stmt->execute([':id' => $id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-            return null;
-        }
-    }
-
-
-    /* ----------------------
-       LIST ALL ARTICLES
-    -----------------------*/
-    public function listArticles() {
-        $sql = 'SELECT * FROM articles ORDER BY id_article DESC';
-
-        $db = config::getConnexion();
-
-        try {
-            $stmt = $db->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-            return [];
-        }
-    }
-
-
-    /* ----------------------
-       IMAGE UPLOAD (same style as OffreController)
-    -----------------------*/
-    public function handleImageUpload() {
-
-        $imagePath = '../../assets/images/logo.png';
-
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
-
-            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-
-            if (in_array($ext, $allowed) && $_FILES['image']['size'] < 5000000) {
-
-                $newName = 'article_' . uniqid() . '.' . $ext;
-                $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/projet2/assets/images/';
-
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-
-                $destination = $uploadDir . $newName;
-
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
-                    $imagePath = '../../assets/images/' . $newName;
-                }
-            }
-        }
-
-        return $imagePath;
-    }
-}
-?>
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3

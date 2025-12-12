@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../Controller/OffreController.php');
 require_once(__DIR__ . '/../../Model/Offres.php');
-<<<<<<< HEAD
 require_once(__DIR__ . '/../../Controller/ArticleController.php');
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -9,7 +8,6 @@ $controller = new OffreController();
 $articleController = new ArticleController();
 $articles = $articleController->listArticles();
 
-// Récupération de l'offre existante
 $r = $controller->getOffreById($id);
 if (!$r) {
     header('Location: OffreList.php');
@@ -19,22 +17,20 @@ if (!$r) {
 $selectedArticleId = isset($r['article']) ? $r['article'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Gestion image : garder l'ancienne si aucune nouvelle n'est uploadée
-    $imagePath = $r['image'];
+    $imagePath = $r['image']; // Garder l'image actuelle par défaut
     
+    // Si une nouvelle image est uploadée
     if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === 0) {
+        // Supprimer l'ancienne image si elle existe
+        if (!empty($r['image'])) {
+            $oldImagePath = $_SERVER['DOCUMENT_ROOT'] . '/projet2/' . str_replace('../../', '', $r['image']);
+            if (file_exists($oldImagePath) && strpos($oldImagePath, 'images/offres/') !== false) {
+                unlink($oldImagePath);
+            }
+        }
         $imagePath = $controller->handleImageUpload();
     }
 
-    // Création de l'objet Offre
-=======
-
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$controller = new OffreController();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Create Offre object with updated data
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     $offre = new Offre(
         $_POST['nom'],
         $_POST['description'],
@@ -42,29 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['categorie'],
         $_POST['categorie_probleme'],
         $_POST['contact'],
-<<<<<<< HEAD
         $imagePath,
         intval($_POST['article_id'])
     );
 
-    // Mise à jour dans la base
     $controller->updateOffre($offre, $id);
 
-    // Redirection
-=======
-        $_POST['image'] ?: 'assets/placeholder.png'
-    );
-    
-    // Update offre in database
-    $controller->updateOffre($offre, $id);
-    
-    // Redirect
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     header('Location: OffreList.php');
     exit;
 }
 
-<<<<<<< HEAD
 include "template.php";
 ?>
 
@@ -74,41 +57,40 @@ include "template.php";
     <form method="post" enctype="multipart/form-data" class="admin-form">
 
         <div class="form-group">
-            <label class="form-label">Nom du spécialiste</label>
-            <input name="nom" type="text" class="form-input" value="<?= htmlspecialchars($r['nom_specialiste']) ?>" required>
+            <label class="form-label">Nom du spécialiste *</label>
+            <input name="nom" type="text" class="form-input" value="<?= htmlspecialchars($r['nom_specialiste']) ?>">
         </div>
 
         <div class="form-group">
-            <label class="form-label">Description</label>
+            <label class="form-label">Description *</label>
             <textarea name="description" rows="4" class="form-input"><?= htmlspecialchars($r['description']) ?></textarea>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Prix (DT)</label>
-                <input name="prix" type="number" step="0.01" class="form-input" value="<?= $r['prix'] ?>" required>
+                <label class="form-label">Prix (DT) *</label>
+                <input name="prix" type="number" step="0.01" class="form-input" value="<?= $r['prix'] ?>">
             </div>
             <div class="form-group">
                 <label class="form-label">Catégorie</label>
-                <input name="categorie" type="text" class="form-input" value="<?= htmlspecialchars($r['categorie']) ?>" required>
+                <input name="categorie" type="text" class="form-input" value="<?= htmlspecialchars($r['categorie']) ?>">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label class="form-label">Catégorie problème</label>
-                <input name="categorie_probleme" type="text" class="form-input" value="<?= htmlspecialchars($r['categorie_probleme']) ?>" required>
+                <input name="categorie_probleme" type="text" class="form-input" value="<?= htmlspecialchars($r['categorie_probleme']) ?>">
             </div>
             <div class="form-group">
                 <label class="form-label">Contact</label>
-                <input name="contact" type="text" class="form-input" value="<?= htmlspecialchars($r['contact']) ?>" required>
+                <input name="contact" type="text" class="form-input" value="<?= htmlspecialchars($r['contact']) ?>">
             </div>
         </div>
 
-        <!-- Select Article -->
         <div class="form-group">
-            <label class="form-label">Associer un article</label>
-            <select name="article_id" class="form-input" required>
+            <label class="form-label">Associer un article *</label>
+            <select name="article_id" class="form-input">
                 <option value="">-- Choisir un article --</option>
                 <?php foreach ($articles as $art): ?>
                     <option value="<?= $art['id_article'] ?>" <?= $selectedArticleId == $art['id_article'] ? 'selected' : '' ?>>
@@ -118,15 +100,16 @@ include "template.php";
             </select>
         </div>
 
-        <!-- Image actuelle / Upload -->
         <div class="form-group">
-            <label class="form-label">Image actuelle</label>
             <?php if (!empty($r['image'])): ?>
+                <label class="form-label">Image actuelle</label>
                 <div class="current-image" style="margin: 15px 0;">
                     <img src="<?= htmlspecialchars($r['image']) ?>" 
                          alt="Image actuelle"
                          style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                 </div>
+            <?php else: ?>
+                <p style="color: #666; font-style: italic;">Aucune image actuellement</p>
             <?php endif; ?>
             
             <label class="form-label" style="margin-top: 20px;">Changer l'image (optionnel)</label>
@@ -153,71 +136,5 @@ include "template.php";
     </main>
 </div>
 
-=======
-// Get existing offre data
-$r = $controller->getOffreById($id);
-
-include "template.php";
-?>
-
-<h2 class="mb-4">Modifier une offre</h2>
-
-<form method="post" class="card p-4 shadow">
-
-    <div class="mb-3">
-        <label class="form-label">Nom</label>
-        <input name="nom" type="text" class="form-control"
-               value="<?= htmlspecialchars($r['nom_specialiste']) ?>" required>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea name="description" rows="4" class="form-control"><?= htmlspecialchars($r['description']) ?></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Prix</label>
-        <input name="prix" type="number" step="0.01" class="form-control"
-               value="<?= $r['prix'] ?>">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Catégorie</label>
-        <input name="categorie" type="text" class="form-control"
-               value="<?= htmlspecialchars($r['categorie']) ?>">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Catégorie problème</label>
-        <input name="categorie_probleme" type="text" class="form-control"
-               value="<?= htmlspecialchars($r['categorie_probleme']) ?>">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Contact</label>
-        <input name="contact" type="text" class="form-control"
-               value="<?= htmlspecialchars($r['contact']) ?>">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Image (URL ou chemin)</label>
-
-        <div class="mb-2">
-            <img src="/Projet%20-%20Copie/<?= htmlspecialchars($r['image']) ?>" 
-                 style="width:150px;height:100px;object-fit:cover;border-radius:8px">
-        </div>
-
-        <input name="image" type="text" class="form-control"
-               value="<?= htmlspecialchars($r['image']) ?>">
-        <small class="text-muted">Laissez ce champ tel quel si vous ne changez pas l'image.</small>
-    </div>
-
-    <button type="submit" class="btn btn-warning">Enregistrer</button>
-</form>
-
-    <script src="../../assets/js/validationOffre.js"></script>
-
-</div>
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 </body>
 </html>

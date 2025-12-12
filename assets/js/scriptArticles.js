@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close modal on outside click
     if (modal) {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Global function to show offer modal (called from onclick in PHP)
 window.showOfferModal = function(offreId) {
     const modal = document.getElementById('modal');
     const modalBody = document.getElementById('modalBody');

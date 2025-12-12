@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<<<<<<< HEAD
     <?php
     include "templateFront.php";
     ?>
@@ -23,42 +22,6 @@
         </div>
     </section>
 
-=======
-
-    <header>
-        <a href="index.php" class="logo-link">
-            <div class="logo">
-                <img src="..\..\assets\images\logo.png" alt="Logo Together4Peace" class="header-logo">
-                <span class="site-name">Together4Peace</span>
-            </div>
-        </a>
-        <nav>
-            <ul>
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="about.html">À Propos</a></li>
-                <li><a href="quiz.php">Quiz</a></li>
-                <li><a href="testimonials.html">Témoignages</a></li>
-                <li><a href="charter.html">Charte</a></li>
-                <!-- <li><a href="ShowOffre.php" class="nav-cta">Offres</a></li> -->
-                <li><a href="..\Frontoffice\Articles.php">Articles</a></li>
-                <li><a href="..\Backoffice\index.php">Backoffice</a></li>
-            </ul>
-        </nav>
-        <a href="#admin-login" class="btn btn-donate">Espace Admin</a>
-    </header>
-
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1>Bâtir des Ponts. Non des Murs.</h1>
-            <p>Ensemble, agissons pour un monde de Paix et d'Inclusion.</p>
-            <div class="hero-actions">
-                <a href="charter.html" class="btn btn-primary">Signez Notre Charte de Paix</a>
-                <a href="about.html" class="btn btn-secondary">Découvrez Nos Projets</a>
-            </div>
-        </div>
-    </section>
-
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     <section class="featured-sections">
         <h2>Nos Levers d'Engagement</h2>
         <div class="card-container">
@@ -86,11 +49,7 @@
             <div class="card">
                 <i class="fas fa-lightbulb fa-3x icon-primary"></i> 
                 <h3>Testez vos Connaissances</h3>
-<<<<<<< HEAD
                 <p>Quel acteur de paix êtes-vous ? Dé   couvrez votre potentiel d'action et apprenez sur l'inclusion.</p>
-=======
-                <p>Quel acteur de paix êtes-vous ? Découvrez votre potentiel d'action et apprenez sur l'inclusion.</p>
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
                 <a href="quiz.php" class="card-link">Faire le Quiz</a>
             </div>
         </div>

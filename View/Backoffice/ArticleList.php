@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php 
 require_once(__DIR__ . '/../../Controller/ArticleController.php');
 
@@ -19,8 +18,10 @@ include "template.php";
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Image</th>
                 <th>Titre</th>
                 <th>Thème</th>
+                <th>Date</th>
                 <th>Offres liées</th>
                 <th>Actions</th>
             </tr>
@@ -28,16 +29,37 @@ include "template.php";
         <tbody>
         <?php if(empty($rows)): ?>
             <tr class="empty-state">
-                <td colspan="5">Aucun article disponible</td>
+                <td colspan="7">Aucun article disponible</td>
             </tr>
         <?php else: ?>
             <?php foreach($rows as $a): ?>
             <tr>
                 <td><?= $a['id_article'] ?></td>
-                <td><?= htmlspecialchars($a['titre']) ?></td>
+                
+                <td>
+                    <?php if (!empty($a['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/projet2/' . str_replace('../../', '', $a['image']))): ?>
+                        <img src="<?= htmlspecialchars($a['image']) ?>"
+                             alt="<?= htmlspecialchars($a['titre']) ?>"
+                             class="table-img"
+                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                    <?php else: ?>
+                        <div class="no-image-placeholder" style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; border-radius: 8px; color: white; font-size: 24px;">
+                            <i class="fa fa-newspaper"></i>
+                        </div>
+                    <?php endif; ?>
+                </td>
+                
+                <td style="max-width: 250px;">
+                    <strong><?= htmlspecialchars($a['titre']) ?></strong>
+                    <?php if (!empty($a['resume'])): ?>
+                        <br><small style="color: #666;"><?= htmlspecialchars(substr($a['resume'], 0, 80)) ?>...</small>
+                    <?php endif; ?>
+                </td>
+                
                 <td><?= htmlspecialchars($a['theme']) ?></td>
+                
+                <td><?= date('d/m/Y', strtotime($a['date_publication'])) ?></td>
 
-                <!-- Affichage des offres liées avec count -->
                 <td>
                     <?php 
                         $offres = $controller->getOffresByArticle($a['id_article']);
@@ -50,7 +72,6 @@ include "template.php";
                                . $count . " offre" . ($count > 1 ? "s" : "")
                                . "</span>";
                             
-                            // Optionnel : afficher les noms en tooltip ou liste déroulante
                             echo "<div class='offres-details' style='font-size:0.85em; margin-top:5px;'>";
                             foreach ($offres as $offre) {
                                 echo "• " . htmlspecialchars($offre['nom_specialiste']) . "<br>";
@@ -101,6 +122,9 @@ include "template.php";
     margin-top: 5px;
     font-size: 0.85em;
 }
+.table-img {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 </style>
 
 </main>
@@ -108,50 +132,3 @@ include "template.php";
 
 </body>
 </html>
-=======
-<?php 
-require_once(__DIR__ . '/../../Controller/ArticleController.php');
-
-$controller = new ArticleController();
-$rows = $controller->listArticles();
-
-include "template.php";
-?>
-
-<h1 class="mb-4">Gestion des Articles</h1>
-
-<a href="addArticle.php" class="btn btn-primary mb-3">Ajouter un article</a>
-
-<div class="card shadow">
-    <div class="card-body p-0">
-        <table class="table table-bordered table-hover m-0">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Titre</th>
-                    <th>Thème</th>
-                    <th style="width: 160px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach($rows as $a): ?>
-                <tr>
-                    <td><?= $a['id_article'] ?></td>
-                    <td><?= htmlspecialchars($a['titre']) ?></td>
-                    <td><?= htmlspecialchars($a['theme']) ?></td>
-                    <td>
-                        <a href="editArticle.php?id=<?= $a['id_article'] ?>" class="btn btn-warning btn-sm">Modifier</a>
-                        <a href="deleteArticle.php?id=<?= $a['id_article'] ?>" class="btn btn-danger btn-sm" 
-                           onclick="return confirm('Supprimer cet article ?')">Supprimer</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-</div>
-</body>
-</html>
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3

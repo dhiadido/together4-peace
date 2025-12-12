@@ -1,14 +1,7 @@
-/* Variables de couleurs pour la cohérence */
 :root {
-<<<<<<< HEAD
     --color-primary: #002D62;
     --color-secondary: #ffc107;
     --color-accent: #26a69a;
-=======
-    --color-primary: #002D62;   /* Bleu Marine */
-    --color-secondary: #ffc107; /* Jaune Optimiste (dons, accent) */
-    --color-accent: #26a69a;    /* Vert Menthe (Paix/Croissance) */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     --color-dark: #333;
     --color-light: #f4f4f4;
     --font-family: 'Arial', sans-serif;
@@ -46,16 +39,11 @@ header {
     z-index: 1000;
 }
 
-<<<<<<< HEAD
-=======
-/* Le lien englobant le logo */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 .logo-link {
     color: inherit;
     text-decoration: none;
 }
 
-<<<<<<< HEAD
 .logo {
     display: flex;
     align-items: center;
@@ -71,26 +59,6 @@ header {
     font-size: 1.6em;
     font-weight: bold;
     color: var(--color-primary);
-=======
-/* Conteneur du logo et du texte */
-.logo {
-    display: flex;
-    align-items: center; /* Aligne verticalement l'image et le texte */
-    gap: 10px; /* Espace entre l'image et le nom */
-}
-
-/* Style de l'image du logo */
-.header-logo {
-    max-height: 50px; 
-    width: auto; 
-}
-
-/* Style du nom du site */
-.site-name {
-    font-size: 1.6em; 
-    font-weight: bold;
-    color: var(--color-primary); /* Le nom du site en Bleu Marine */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 }
 
 nav ul {
@@ -114,11 +82,7 @@ nav ul a:hover {
 
 .nav-cta {
     font-weight: bold;
-<<<<<<< HEAD
     color: var(--color-secondary) !important;
-=======
-    color: var(--color-secondary) !important; 
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 }
 
 /* BUTTONS */
@@ -150,11 +114,7 @@ nav ul a:hover {
 }
 
 .btn-primary:hover {
-<<<<<<< HEAD
     background-color: #004080;
-=======
-    background-color: #004080; 
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 }
 
 .btn-secondary:hover {
@@ -164,11 +124,7 @@ nav ul a:hover {
 /* HERO SECTION */
 .hero-section {
     background-color: var(--color-light);
-<<<<<<< HEAD
-    background-image: url('placeholder-peace.jpg');
-=======
-    background-image: url('placeholder-peace.jpg'); 
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
+    background-image: url('../images/Bâtir des Ponts. Non des Murs..jpg');
     background-size: cover;
     background-position: center;
     min-height: 60vh;
@@ -187,11 +143,7 @@ nav ul a:hover {
 
 .hero-content h1 {
     font-size: 3em;
-<<<<<<< HEAD
     color: var(--color-primary);
-=======
-    color: var(--color-primary); 
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     margin-bottom: 15px;
 }
 
@@ -201,19 +153,11 @@ nav ul a:hover {
     color: var(--color-dark);
 }
 
-<<<<<<< HEAD
 /* FEATURED SECTIONS */
 .featured-sections {
     padding: 60px 5%;
     text-align: center;
     background-color: #fafafa;
-=======
-/* FEATURED SECTIONS (Carreaux Pros) */
-.featured-sections {
-    padding: 60px 5%;
-    text-align: center;
-    background-color: #fafafa; /* Léger fond pour faire ressortir les cartes */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 }
 
 .featured-sections h2 {
@@ -226,11 +170,7 @@ nav ul a:hover {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-<<<<<<< HEAD
     gap: 30px;
-=======
-    gap: 30px; /* Espace accru entre les cartes */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 }
 
 .card {
@@ -238,15 +178,9 @@ nav ul a:hover {
     border: 1px solid var(--color-light);
     border-radius: 8px;
     padding: 30px;
-<<<<<<< HEAD
     width: 23%;
     min-width: 250px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-=======
-    width: 23%; /* Ajusté pour quatre cartes par ligne (environ) */
-    min-width: 250px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ombre plus marquée */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     transition: transform 0.3s, box-shadow 0.3s;
     text-align: center;
 }
@@ -258,22 +192,12 @@ nav ul a:hover {
 
 .card h3 {
     margin: 15px 0;
-<<<<<<< HEAD
     color: var(--color-primary);
 }
 
 .icon-blue { color: var(--color-primary); }
 .icon-yellow { color: var(--color-secondary); }
 .icon-green { color: var(--color-accent); }
-=======
-    color: var(--color-primary); /* Titres des cartes en Bleu Marine */
-}
-
-/* Couleurs des icônes */
-.icon-blue { color: var(--color-primary); } 
-.icon-yellow { color: var(--color-secondary); } 
-.icon-green { color: var(--color-accent); } 
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 .icon-primary { color: var(--color-primary); }
 
 .card-link {
@@ -283,7 +207,6 @@ nav ul a:hover {
     color: var(--color-accent);
 }
 
-<<<<<<< HEAD
 /* QUIZ SECTION STYLES */
 .container {
     max-width: 900px;
@@ -1077,8 +1000,6 @@ nav ul a:hover {
     font-size: 1.1em;
 }
 
-=======
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 /* FOOTER */
 footer {
     background-color: var(--color-dark);
@@ -1087,7 +1008,6 @@ footer {
     font-size: 0.9em;
 }
 
-<<<<<<< HEAD
 .footer-content {
     display: flex;
     justify-content: space-between;
@@ -1097,12 +1017,6 @@ footer {
 }
 
 .footer-logo {
-=======
-/* ... (Reste du footer identique) ... */
-
-.footer-logo {
-    /* Style pour que le logo image + texte s'affiche correctement dans le footer */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1110,7 +1024,6 @@ footer {
     width: auto;
 }
 
-<<<<<<< HEAD
 .footer-logo .site-name {
     color: white;
 }
@@ -1349,10 +1262,6 @@ footer {
     .modal-actions {
         flex-direction: column;
     }
-=======
-.footer-logo-img {
-    max-height: 40px; /* Taille légèrement réduite dans le footer */
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
 }
 
 /* RESPONSIVE DESIGN */
@@ -1382,7 +1291,6 @@ footer {
     .footer-content {
         flex-direction: column;
         gap: 30px;
-<<<<<<< HEAD
         text-align: center;
     }
     .footer-links, .footer-social {
@@ -1440,7 +1348,5 @@ footer {
     }
     .modal-actions {
         flex-direction: column;
-=======
->>>>>>> 70a1b443d163ee0a60357ea7d5e6588e414d81f3
     }
 }

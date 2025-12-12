@@ -9,9 +9,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactInput = document.querySelector('input[name="contact"]');
     const imageInput = document.querySelector('input[name="image"]');
     
+    // Remove HTML5 validation attributes
+    if (form) {
+        form.setAttribute('novalidate', 'novalidate');
+    }
+    
     function validerNom(nom) {
+        if (!nom || nom.trim() === '') {
+            return { valid: false, message: 'Le nom est requis' };
+        }
         const regex = /^[a-zA-ZÀ-ÿ\s.\-']+$/;
-        return regex.test(nom);
+        if (!regex.test(nom)) {
+            return { valid: false, message: 'Le nom ne doit contenir que des lettres, espaces, points, tirets et apostrophes' };
+        }
+        return { valid: true, message: '' };
+    }
+    
+    function validerDescription(desc) {
+        if (!desc || desc.trim() === '') {
+            return { valid: false, message: 'La description est requise' };
+        }
+        if (desc.length < 10) {
+            return { valid: false, message: 'La description doit contenir au moins 10 caractères' };
+        }
+        if (desc.length > 1000) {
+            return { valid: false, message: 'La description ne peut pas dépasser 1000 caractères' };
+        }
+        return { valid: true, message: '' };
     }
     
     function validerEmail(email) {
@@ -25,22 +49,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function validerContact(contact) {
-        return validerEmail(contact) || validerTelephone(contact);
+        if (!contact || contact.trim() === '') {
+            return { valid: true, message: '' }; // Optional field
+        }
+        if (!validerEmail(contact) && !validerTelephone(contact)) {
+            return { valid: false, message: 'Veuillez entrer un email valide ou un numéro de téléphone tunisien' };
+        }
+        return { valid: true, message: '' };
     }
 
     function validerPrix(prix) {
-        return prix > 0 && prix <= 10000;
+        if (!prix || prix === '') {
+            return { valid: false, message: 'Le prix est requis' };
+        }
+        const prixNum = parseFloat(prix);
+        if (isNaN(prixNum)) {
+            return { valid: false, message: 'Le prix doit être un nombre valide' };
+        }
+        if (prixNum <= 0) {
+            return { valid: false, message: 'Le prix doit être supérieur à 0' };
+        }
+        if (prixNum > 10000) {
+            return { valid: false, message: 'Le prix ne peut pas dépasser 10000 DT' };
+        }
+        return { valid: true, message: '' };
     }
     
     function validerCategorie(cat) {
+        if (!cat || cat.trim() === '') {
+            return { valid: true, message: '' }; // Optional field
+        }
         const regex = /^[a-zA-ZÀ-ÿ\s,\-]+$/;
-        return regex.test(cat);
+        if (!regex.test(cat)) {
+            return { valid: false, message: 'La catégorie ne doit contenir que des lettres, espaces, virgules et tirets' };
+        }
+        return { valid: true, message: '' };
     }
     
-    function validerImage(url) {
-        if (!url || url.trim() === '') return true;
-        const regex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg)|assets\/.*\.(?:png|jpg|jpeg|gif|webp|svg))$/i;
-        return regex.test(url);
+    function validerImage(file) {
+        if (!file) {
+            return { valid: true, message: '' }; // Optional field
+        }
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        
+        if (!allowedTypes.includes(file.type)) {
+            return { valid: false, message: 'Format invalide. Utilisez JPG, PNG, GIF ou WEBP' };
+        }
+        if (file.size > maxSize) {
+            return { valid: false, message: 'Le fichier est trop grand (max 5MB)' };
+        }
+        return { valid: true, message: '' };
     }
     
     function afficherErreur(input, message) {
@@ -48,13 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!errorDiv) {
             errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
-            errorDiv.style.color = 'red';
-            errorDiv.style.fontSize = '0.9em';
+            errorDiv.style.color = '#dc3545';
+            errorDiv.style.fontSize = '0.875em';
             errorDiv.style.marginTop = '5px';
             input.parentElement.appendChild(errorDiv);
         }
         errorDiv.textContent = message;
-        input.style.borderColor = 'red';
+        input.style.borderColor = '#dc3545';
+        input.setAttribute('aria-invalid', 'true');
     }
 
     function effacerErreur(input) {
@@ -63,140 +123,277 @@ document.addEventListener('DOMContentLoaded', function() {
             errorDiv.remove();
         }
         input.style.borderColor = '';
+        input.removeAttribute('aria-invalid');
     }
     
+    // Real-time validation for nom
     if (nomInput) {
-        nomInput.addEventListener('input', function() {
-            if (this.value && !validerNom(this.value)) {
-                afficherErreur(this, 'Le nom ne doit contenir que des lettres, espaces, points, tirets et apostrophes');
+        nomInput.addEventListener('blur', function() {
+            const validation = validerNom(this.value);
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
             } else {
                 effacerErreur(this);
+            }
+        });
+        
+        nomInput.addEventListener('input', function() {
+            const errorDiv = this.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                const validation = validerNom(this.value);
+                if (validation.valid) {
+                    effacerErreur(this);
+                } else {
+                    afficherErreur(this, validation.message);
+                }
             }
         });
     }
 
+    // Real-time validation for description
+    if (descTextarea) {
+        descTextarea.addEventListener('blur', function() {
+            const validation = validerDescription(this.value);
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
+            } else {
+                effacerErreur(this);
+            }
+        });
+        
+        descTextarea.addEventListener('input', function() {
+            const errorDiv = this.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                const validation = validerDescription(this.value);
+                if (validation.valid) {
+                    effacerErreur(this);
+                } else {
+                    afficherErreur(this, validation.message);
+                }
+            }
+        });
+    }
+
+    // Real-time validation for prix
     if (prixInput) {
+        prixInput.addEventListener('blur', function() {
+            const validation = validerPrix(this.value);
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
+            } else {
+                effacerErreur(this);
+            }
+        });
+        
         prixInput.addEventListener('input', function() {
-            const prix = parseFloat(this.value);
-            if (this.value && !validerPrix(prix)) {
-                afficherErreur(this, 'Le prix doit être entre 0.01 et 10000 DT');
-            } else {
-                effacerErreur(this);
+            const errorDiv = this.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                const validation = validerPrix(this.value);
+                if (validation.valid) {
+                    effacerErreur(this);
+                } else {
+                    afficherErreur(this, validation.message);
+                }
             }
         });
     }
     
+    // Real-time validation for categorie
     if (categorieInput) {
+        categorieInput.addEventListener('blur', function() {
+            const validation = validerCategorie(this.value);
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
+            } else {
+                effacerErreur(this);
+            }
+        });
+        
         categorieInput.addEventListener('input', function() {
-            if (this.value && !validerCategorie(this.value)) {
-                afficherErreur(this, 'La catégorie ne doit contenir que des lettres, espaces, virgules et tirets');
-            } else {
-                effacerErreur(this);
+            const errorDiv = this.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                const validation = validerCategorie(this.value);
+                if (validation.valid) {
+                    effacerErreur(this);
+                } else {
+                    afficherErreur(this, validation.message);
+                }
             }
         });
     }
     
+    // Real-time validation for categorie_probleme
     if (categorieProbInput) {
-        categorieProbInput.addEventListener('input', function() {
-            if (this.value && !validerCategorie(this.value)) {
-                afficherErreur(this, 'La catégorie problème ne doit contenir que des lettres, espaces, virgules et tirets');
+        categorieProbInput.addEventListener('blur', function() {
+            const validation = validerCategorie(this.value);
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
             } else {
                 effacerErreur(this);
             }
         });
+        
+        categorieProbInput.addEventListener('input', function() {
+            const errorDiv = this.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                const validation = validerCategorie(this.value);
+                if (validation.valid) {
+                    effacerErreur(this);
+                } else {
+                    afficherErreur(this, validation.message);
+                }
+            }
+        });
     }
     
+    // Real-time validation for contact
     if (contactInput) {
         contactInput.addEventListener('blur', function() {
-            if (this.value && !validerContact(this.value)) {
-                afficherErreur(this, 'Veuillez entrer un email valide ou un numéro de téléphone tunisien');
+            const validation = validerContact(this.value);
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
             } else {
                 effacerErreur(this);
             }
         });
+        
+        contactInput.addEventListener('input', function() {
+            const errorDiv = this.parentElement.querySelector('.error-message');
+            if (errorDiv) {
+                const validation = validerContact(this.value);
+                if (validation.valid) {
+                    effacerErreur(this);
+                } else {
+                    afficherErreur(this, validation.message);
+                }
+            }
+        });
     }
     
+    // Image validation and preview
     if (imageInput) {
-        imageInput.addEventListener('blur', function() {
-            if (this.value && !validerImage(this.value)) {
-                afficherErreur(this, 'Veuillez entrer une URL d\'image valide (png, jpg, jpeg, gif, webp, svg)');
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            const validation = validerImage(file);
+            
+            if (!validation.valid) {
+                afficherErreur(this, validation.message);
             } else {
                 effacerErreur(this);
+            }
+            
+            // Image preview
+            const preview = document.getElementById('imagePreview');
+            if (preview) {
+                if (file && validation.valid) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.innerHTML = '<strong>Nouvelle image:</strong><br><img src="' + e.target.result + '" style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 10px;">';
+                    }
+                    reader.readAsDataURL(file);
+                } else if (!file) {
+                    preview.innerHTML = '';
+                }
             }
         });
     }
     
-    form.addEventListener('submit', function(e) {
-        let isValid = true;
-        
-        if (!nomInput.value || !validerNom(nomInput.value)) {
-            afficherErreur(nomInput, 'Le nom est requis et ne doit contenir que des lettres');
-            isValid = false;
-        }
-        
-        if (!descTextarea.value && descTextarea.value.length < 10) {
-            afficherErreur(descTextarea, 'La description doit contenir au moins 10 caractères');
-            isValid = false;
-        }
-        
-        const prix = parseFloat(prixInput.value);
-        if (!prixInput.value || !validerPrix(prix)) {
-            afficherErreur(prixInput, 'Le prix est requis et doit être entre 0.01 et 10000 DT');
-            isValid = false;
-        }
-        
-        if (categorieInput.value && !validerCategorie(categorieInput.value)) {
-            afficherErreur(categorieInput, 'La catégorie contient des caractères invalides');
-            isValid = false;
-        }
-        
-        if (categorieProbInput.value && !validerCategorie(categorieProbInput.value)) {
-            afficherErreur(categorieProbInput, 'La catégorie problème contient des caractères invalides');
-            isValid = false;
-        }
-        
-        if (contactInput.value && !validerContact(contactInput.value)) {
-            afficherErreur(contactInput, 'Veuillez entrer un email ou téléphone valide');
-            isValid = false;
-        }
-        
-        if (imageInput.value && !validerImage(imageInput.value)) {
-            afficherErreur(imageInput, 'URL d\'image invalide');
-            isValid = false;
-        }
-        
-        if (!isValid) {
-            e.preventDefault();
-            alert('Veuillez corriger les erreurs dans le formulaire avant de soumettre.');
-        }
-    });
-});
-
-// Image preview
-document.getElementById('imageInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('imagePreview');
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = '<strong>Nouvelle image:</strong><br><img src="' + e.target.result + '" style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 10px;">';
-        }
-        reader.readAsDataURL(file);
-    } else {
-        preview.innerHTML = '';
-    }
-});
-// Image preview
-document.getElementById('imageInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('imagePreview');
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
-        }
-        reader.readAsDataURL(file);
+    // Form submission validation
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Always prevent default to handle validation
+            
+            let isValid = true;
+            let firstInvalidField = null;
+            
+            // Validate nom
+            const nomValidation = validerNom(nomInput.value);
+            if (!nomValidation.valid) {
+                afficherErreur(nomInput, nomValidation.message);
+                isValid = false;
+                if (!firstInvalidField) firstInvalidField = nomInput;
+            } else {
+                effacerErreur(nomInput);
+            }
+            
+            // Validate description
+            const descValidation = validerDescription(descTextarea.value);
+            if (!descValidation.valid) {
+                afficherErreur(descTextarea, descValidation.message);
+                isValid = false;
+                if (!firstInvalidField) firstInvalidField = descTextarea;
+            } else {
+                effacerErreur(descTextarea);
+            }
+            
+            // Validate prix
+            const prixValidation = validerPrix(prixInput.value);
+            if (!prixValidation.valid) {
+                afficherErreur(prixInput, prixValidation.message);
+                isValid = false;
+                if (!firstInvalidField) firstInvalidField = prixInput;
+            } else {
+                effacerErreur(prixInput);
+            }
+            
+            // Validate categorie
+            if (categorieInput) {
+                const categorieValidation = validerCategorie(categorieInput.value);
+                if (!categorieValidation.valid) {
+                    afficherErreur(categorieInput, categorieValidation.message);
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = categorieInput;
+                } else {
+                    effacerErreur(categorieInput);
+                }
+            }
+            
+            // Validate categorie_probleme
+            if (categorieProbInput) {
+                const categorieProbValidation = validerCategorie(categorieProbInput.value);
+                if (!categorieProbValidation.valid) {
+                    afficherErreur(categorieProbInput, categorieProbValidation.message);
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = categorieProbInput;
+                } else {
+                    effacerErreur(categorieProbInput);
+                }
+            }
+            
+            // Validate contact
+            if (contactInput) {
+                const contactValidation = validerContact(contactInput.value);
+                if (!contactValidation.valid) {
+                    afficherErreur(contactInput, contactValidation.message);
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = contactInput;
+                } else {
+                    effacerErreur(contactInput);
+                }
+            }
+            
+            // Validate image
+            if (imageInput) {
+                const file = imageInput.files[0];
+                const imageValidation = validerImage(file);
+                if (!imageValidation.valid) {
+                    afficherErreur(imageInput, imageValidation.message);
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = imageInput;
+                } else {
+                    effacerErreur(imageInput);
+                }
+            }
+            
+            if (!isValid) {
+                alert('Veuillez corriger les erreurs dans le formulaire avant de soumettre.');
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                }
+            } else {
+                // If all validations pass, submit the form
+                this.submit();
+            }
+        });
     }
 });
