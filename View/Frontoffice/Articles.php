@@ -1,14 +1,28 @@
 <?php
 require_once(__DIR__ . '/../../Controller/ArticleController.php');
 
-$controller = new ArticleController();
+$articleController = new ArticleController();
+
+// Fonction pour mettre en évidence le terme de recherche
+function highlightSearchTerm($text, $searchTerm) {
+    if (empty($searchTerm)) {
+        return htmlspecialchars($text);
+    }
+    $highlighted = preg_replace('/(' . preg_quote($searchTerm, '/') . ')/i', '<mark>$1</mark>', htmlspecialchars($text));
+    return $highlighted;
+}
+
+// Handle article search
+$searchTermArticle = isset($_GET['search_article']) ? trim($_GET['search_article']) : '';
 
 $quizScore = isset($_GET['score']) ? (int)$_GET['score'] : 0;
 
-if ($quizScore > 0) {
-    $articles = $controller->getSmartRecommendations($quizScore);
+if (!empty($searchTermArticle)) {
+    $articles = $articleController->searchArticlesByTerm($searchTermArticle);
+} elseif ($quizScore > 0) {
+    $articles = $articleController->getSmartRecommendations($quizScore);
 } else {
-    $articles = $controller->listArticlesWithOffres();
+    $articles = $articleController->listArticlesWithOffres();
 }
 
 if (empty($articles)) {
@@ -390,6 +404,59 @@ if (empty($articles)) {
                 font-size: 1em;
             }
         }
+
+        /* Researcher Search Styles */
+        .chercheur-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2) !important;
+        }
+
+        .disponibilite-badge.disponible {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .disponibilite-badge.occupé {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .disponibilite-badge.en {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .disponibilite-badge.demande {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .search-widget input:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-widget button:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .search-widget form {
+                flex-direction: column;
+            }
+
+            .researchers-section > div {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        mark {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -398,6 +465,33 @@ if (empty($articles)) {
     <div class="header">
         <h1>🎯 Articles Recommandés Pour Vous</h1>
         <p>Score: <?= $quizScore ?>% - <?= count($articles) ?> article(s) personnalisé(s)</p>
+    </div>
+
+    <!-- Search Widget for Articles -->
+    <div class="search-widget" style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px; text-align: center;">
+        <h2 style="color: #2c3e50; margin-bottom: 20px; font-size: 1.5em;">
+            <i class="fa fa-search"></i> Rechercher un Article
+        </h2>
+        <form method="GET" action="Articles.php" style="max-width: 500px; margin: 0 auto; display: flex; gap: 10px;">
+            <?php if ($quizScore > 0): ?>
+                <input type="hidden" name="score" value="<?= $quizScore ?>">
+            <?php endif; ?>
+            <input type="text" name="search_article" value="<?= htmlspecialchars($searchTermArticle) ?>"
+                   placeholder="Entrez un mot-clé..."
+                   style="flex: 1; padding: 12px; border: 2px solid #667eea; border-radius: 25px; font-size: 16px; outline: none;">
+            <button type="submit" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: transform 0.2s ease;">
+                <i class="fa fa-search"></i> Rechercher
+            </button>
+        </form>
+        <?php if (!empty($searchTermArticle)): ?>
+            <p style="margin-top: 15px; color: #666;">
+                Résultats pour "<strong><?= htmlspecialchars($searchTermArticle) ?></strong>"
+                (<?= count($articles) ?> article(s) trouvé(s))
+                <a href="Articles.php<?= $quizScore > 0 ? '?score=' . $quizScore : '' ?>" style="color: #667eea; text-decoration: none; margin-left: 10px;">
+                    <i class="fa fa-times"></i> Effacer
+                </a>
+            </p>
+        <?php endif; ?>
     </div>
 
     <div class="articles-grid">
@@ -436,11 +530,11 @@ if (empty($articles)) {
                 </div>
 
                 <div class="article-content">
-                    <span class="article-theme"><?= htmlspecialchars($article['theme']) ?></span>
+                    <span class="article-theme"><?= highlightSearchTerm($article['theme'], $searchTermArticle) ?></span>
                     
-                    <h3 class="article-title"><?= htmlspecialchars($article['titre']) ?></h3>
+                    <h3 class="article-title"><?= highlightSearchTerm($article['titre'], $searchTermArticle) ?></h3>
                     
-                    <p class="article-resume"><?= htmlspecialchars($article['resume']) ?></p>
+                    <p class="article-resume"><?= highlightSearchTerm($article['resume'], $searchTermArticle) ?></p>
                     
                     <div class="article-meta">
                         <?php if (isset($article['recommendation_score'])): ?>
