@@ -221,6 +221,7 @@ footer {
     font-size: 0.9em;
 }
 
+<<<<<<< HEAD
 .footer-content {
     display: flex;
     justify-content: space-between;
@@ -228,6 +229,9 @@ footer {
     padding-bottom: 20px;
     border-bottom: 1px solid #555;
 }
+=======
+/* ... (Reste du footer identique) ... */
+>>>>>>> kadi
 
 .footer-logo {
     /* Style pour que le logo image + texte s'affiche correctement dans le footer */
@@ -238,14 +242,18 @@ footer {
     width: auto;
 }
 
+<<<<<<< HEAD
 .footer-logo .site-name {
     color: white; /* Le nom du site en blanc dans le footer */
 }
 
+=======
+>>>>>>> kadi
 .footer-logo-img {
     max-height: 40px; /* Taille légèrement réduite dans le footer */
 }
 
+<<<<<<< HEAD
 .footer-links h4, .footer-social h4 {
     color: var(--color-secondary);
     margin-bottom: 15px;
@@ -287,6 +295,8 @@ footer {
 }
 
 
+=======
+>>>>>>> kadi
 /* RESPONSIVE DESIGN */
 @media (max-width: 900px) {
     header {
@@ -314,9 +324,12 @@ footer {
     .footer-content {
         flex-direction: column;
         gap: 30px;
+<<<<<<< HEAD
         text-align: center;
     }
     .footer-links, .footer-social {
         width: 100%;
+=======
+>>>>>>> kadi
     }
 }
