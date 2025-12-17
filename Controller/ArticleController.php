@@ -516,5 +516,32 @@ class ArticleController {
         if ($daysOld <= 365) return "Il y a " . ceil($daysOld/30) . " mois";
         return "Il y a " . ceil($daysOld/365) . " ans";
     }
+
+    public function searchArticlesByTerm($searchTerm = '') {
+        try {
+            $db = config::getConnexion();
+
+            if (empty($searchTerm)) {
+                return $this->listArticlesWithOffres();
+            }
+
+            $sql = 'SELECT * FROM articles WHERE titre LIKE :search OR theme LIKE :search OR resume LIKE :search OR contenu LIKE :search ORDER BY date_publication DESC';
+            $params = [':search' => '%' . $searchTerm . '%'];
+
+            $stmt = $db->prepare($sql);
+            $stmt->execute($params);
+            $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Add offres to articles
+            foreach ($articles as &$article) {
+                $article['offres'] = $this->getOffresByArticle($article['id_article']);
+            }
+
+            return $articles;
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
+    }
 }
 ?>

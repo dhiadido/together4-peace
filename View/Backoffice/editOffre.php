@@ -1,4 +1,5 @@
 <?php
+//editOffre.php
 require_once(__DIR__ . '/../../Controller/OffreController.php');
 require_once(__DIR__ . '/../../Model/Offres.php');
 require_once(__DIR__ . '/../../Controller/ArticleController.php');
